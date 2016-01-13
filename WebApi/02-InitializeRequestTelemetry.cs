@@ -1,14 +1,10 @@
 ﻿using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.Owin;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WebApi
 {
-    public static class RequestTelemetryInitializer
+    public static class InitializeRequestTelemetry
     {
         public static void InitializeFrom(this RequestTelemetry rt, IOwinContext context)
         {

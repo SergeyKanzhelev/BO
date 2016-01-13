@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Owin;
+﻿using Microsoft.Owin;
 using Owin;
+using WebApi;
 
 [assembly: OwinStartup(typeof(WebApplication3.Startup))]
 
@@ -12,6 +10,8 @@ namespace WebApplication3
     {
         public void Configuration(IAppBuilder app)
         {
+            app.EnableApplicationInsights("YOUR KEY");
+
             ConfigureAuth(app);
         }
     }
