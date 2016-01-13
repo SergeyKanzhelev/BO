@@ -1,27 +1,18 @@
 #Steps
-Middleware:
-https://gist.github.com/s093294/d4b8abdaf4000b6c7f80
 
-Exception tracking:
-https://github.com/AdvancedREI/ApplicationInsights.Helpers
-Specifically: https://github.com/advancedrei/ApplicationInsights.Helpers/blob/master/src/WebApi2/InsightsExceptionLogger.cs
+1. Middleware - see https://gist.github.com/s093294/d4b8abdaf4000b6c7f80
 
-Semantics of fields
-	Attached e-mail
+2. Exception tracking - see https://github.com/advancedrei/ApplicationInsights.Helpers/blob/master/src/WebApi2/InsightsExceptionLogger.cs
 
-Channel & adaptive sampling
-	http://apmtips.com/blog/2015/09/03/more-telemetry-channels/
-
-Enable dependency tracking and Performance counters tracking:
-	https://github.com/Microsoft/ApplicationInsights-aspnet5/issues/65
-
-Telemetry Initializer??
+3. Semantics of fields - see [below](#context-properties)
 	
+4. Channel & adaptive sampling - see http://apmtips.com/blog/2015/09/03/more-telemetry-channels/
 
-Self-diagnostics
-	http://apmtips.com/blog/2015/11/07/application-insights-self-diagnostic/
+5. Enable dependency tracking and Performance counters tracking - see https://github.com/Microsoft/ApplicationInsights-aspnet5/issues/65
 
+6. Telemetry Initializer
 
+7. Self-diagnostics http://apmtips.com/blog/2015/11/07/application-insights-self-diagnostic/
 
 #Context properties
 
@@ -56,7 +47,7 @@ Cardinality: low
 Data format compression: impractical
 
 User Identity Properties
-User and session identities are critical for impact analysis as well as telemetry correlation to record history of user actions just before the error happened. Common scenarios ñ ìhow many users affected by specific database outageî, ìshow me what happened in the session before the certain exceptionî. These properties are also used for sampling score calculation.
+User and session identities are critical for impact analysis as well as telemetry correlation to record history of user actions just before the error happened. Common scenarios ‚Äì ‚Äúhow many users affected by specific database outage‚Äù, ‚Äúshow me what happened in the session before the certain exception‚Äù. These properties are also used for sampling score calculation.
 "ai.user.id"
 "ai.session.id"
 "ai.user.authId"
@@ -73,7 +64,7 @@ Data format compression: make identifier shorter and use base64 encoding
 Current Operation Properties
 Operation properties enables correlation of telemetry items. Our long term plan is to use correlation vector for correlation. However there are many systems that are still using correlation based on id, parent and root. When possible we will only use correlation vector.
 
-Right now operation name represent ìroot operationî  - name of the very first operation initiated omitting of this telemetry item. Operation name is used for grouping telemetry items by logical operations. For example, scenarios like ìwhat pages are affected by this exceptionî or ìshow all types of dependencies this page every executesî.
+Right now operation name represent ‚Äúroot operation‚Äù  - name of the very first operation initiated omitting of this telemetry item. Operation name is used for grouping telemetry items by logical operations. For example, scenarios like ‚Äúwhat pages are affected by this exception‚Äù or ‚Äúshow all types of dependencies this page every executes‚Äù.
 "ai.operation.id"
 "ai.operation.parentId"
 "ai.operation.rootId"
@@ -97,8 +88,8 @@ Location
 Location IP is used for latency investigations for page view performance in JavaScript SDK. It is extracted from http packet IP client address when browser sends data to the DC. This context should not be collected by default by server side SDK. However customer may write custom code to enable data collection for it. Location IP will be masked and geo information extracted from it:
                "ai.location.ip"
 
-NOT EXIST IN DC SCHEMA, ONLY ES: ìai.locaiton.Countryî
-NOT EXIST IN DC SCHEMA, ONLY ES: ìai.locaiton.Provinceî
+NOT EXIST IN DC SCHEMA, ONLY ES: ‚Äúai.locaiton.Country‚Äù
+NOT EXIST IN DC SCHEMA, ONLY ES: ‚Äúai.locaiton.Province‚Äù
 
 Use as a dimension: Yes for Country and Province
 Cardinality: medium
@@ -107,7 +98,7 @@ Data format compression: may use codes for Country and Province in future
 Synthetic source
 Synthetic source is currently used to mark telemetry as being initiated by different synthetic sources like GSM.
 
-NOT EXIST IN DC SCHEMA, ONLY ES: ìai.operation.isSyntheticî
+NOT EXIST IN DC SCHEMA, ONLY ES: ‚Äúai.operation.isSynthetic‚Äù
 
 Use as a dimension: Yes 
 Cardinality: low
@@ -116,7 +107,7 @@ Cardinality: low
 
 Use as a dimension: No
 Cardinality: medium
-Data format compression: Yes, have shorter name for ìApplication Insights Availability Monitoringî
+Data format compression: Yes, have shorter name for ‚ÄúApplication Insights Availability Monitoring‚Äù
 
 
 Telemetry
@@ -129,13 +120,13 @@ Request telemetry item represent incoming http request.
                "requestData.name"
 "requestData.success"
 "requestData.responseCode"
-               NOT EXIST IN DC SCHEMA, ONLY ES: ìrequestData.performanceBucketî
+               NOT EXIST IN DC SCHEMA, ONLY ES: ‚ÄúrequestData.performanceBucket‚Äù
 
 Use as a dimension: Yes
 Cardinality: can be high
                Decrease cardinality:
 1.	Support attribute-based MVC Web API routing
-2.	Apply regex to remove ìidî and ìgiudî parts of URL
+2.	Apply regex to remove ‚Äúid‚Äù and ‚Äúgiud‚Äù parts of URL
 3.	Allow customers easily override
 
 "requestData.httpMethod"
@@ -150,26 +141,26 @@ Dependency Telemetry item
 Dependency telemetry item represent outgoing dependency call that is made by application. It may be http, sql or any customer defined call. 
 Base Data
 
-ìdependencyData.nameî
-               ìdependencyData.successî
-ìdependencyData.dependencyTypeNameî
-               NOT EXIST IN DC SCHEMA, ONLY ES: ìdependencyData.performanceBucketî
+‚ÄúdependencyData.name‚Äù
+               ‚ÄúdependencyData.success‚Äù
+‚ÄúdependencyData.dependencyTypeName‚Äù
+               NOT EXIST IN DC SCHEMA, ONLY ES: ‚ÄúdependencyData.performanceBucket‚Äù
 
 Use as a dimension: Yes
 Cardinality: can be high
                Decrease cardinality:
                                 TBD
 
-               ìdependencyData.commandNameî
-               ìdependencyData.durationî
+               ‚ÄúdependencyData.commandName‚Äù
+               ‚ÄúdependencyData.duration‚Äù
 
 Use as a dimension: No
 Cardinality: high
 
 Trace Telemetry item
 Trace telemetry item represent trace message. Expected to be high volume. 
-               ìmessageData.messageî
-               ìmessageData.severityLevelî
+               ‚ÄúmessageData.message‚Äù
+               ‚ÄúmessageData.severityLevel‚Äù
 
 Use as a dimension: No
 Cardinality: high
@@ -177,7 +168,7 @@ Cardinality: high
 Event Telemetry item
 Event telemetry is tracked by user to indicate an point in time event. Typically for the telemetry purposes. It is expected that event name cardinality will be low. 
 
-ìeventData.nameî
+‚ÄúeventData.name‚Äù
 
 Use as a dimension: Yes
 Cardinality: expected to be low
@@ -185,15 +176,15 @@ Cardinality: expected to be low
 PageView
 Page view telemetry item represent page visit with the loading duration. Page view described by page name and page url. DC will run the logic to extract urlBase from url to allow to group by URL as it is quite common pattern for people to group by it to analyze performance problems.
 
-ìpageViewData.nameî
-NOT EXIST IN DC SCHEMA, ONLY ES: ìpageViewData.urlBaseî
-               NOT EXIST IN DC SCHEMA, ONLY ES: ìpageViewData.durationPerformanceBucketî
+‚ÄúpageViewData.name‚Äù
+NOT EXIST IN DC SCHEMA, ONLY ES: ‚ÄúpageViewData.urlBase‚Äù
+               NOT EXIST IN DC SCHEMA, ONLY ES: ‚ÄúpageViewData.durationPerformanceBucket‚Äù
 
 Use as a dimension: Yes
 Cardinality: expected to be low
 
-ìpageViewData.urlî
-ìpageViewData.durationî
+‚ÄúpageViewData.url‚Äù
+‚ÄúpageViewData.duration‚Äù
 
 Use as a dimension: No
 Cardinality: high
@@ -201,36 +192,36 @@ Cardinality: high
 PageViewPerfromance
 Same as page view, but represents all the network timing information. We are thinking of merging these two together.
 
-ìPageviewPerformanceData.nameî
-NOT EXIST IN DC SCHEMA, ONLY ES: ìpageViewData.urlBaseî
-               NOT EXIST IN DC SCHEMA, ONLY ES: ìpageViewData.durationPerformanceBucketî
+‚ÄúPageviewPerformanceData.name‚Äù
+NOT EXIST IN DC SCHEMA, ONLY ES: ‚ÄúpageViewData.urlBase‚Äù
+               NOT EXIST IN DC SCHEMA, ONLY ES: ‚ÄúpageViewData.durationPerformanceBucket‚Äù
 
 Use as a dimension: Yes
 Cardinality: expected to be low
 
-ìPageviewPerformanceData.urlî
-ìPageviewPerformanceData.durationî
-ìPageviewPerformanceData.perfTotalî
-ìPageviewPerformanceData.networkConnectî
-ìPageviewPerformanceData.sentRequestî
-ìPageviewPerformanceData.receivedResponseî
-ìPageviewPerformanceData.domProcessingî
+‚ÄúPageviewPerformanceData.url‚Äù
+‚ÄúPageviewPerformanceData.duration‚Äù
+‚ÄúPageviewPerformanceData.perfTotal‚Äù
+‚ÄúPageviewPerformanceData.networkConnect‚Äù
+‚ÄúPageviewPerformanceData.sentRequest‚Äù
+‚ÄúPageviewPerformanceData.receivedResponse‚Äù
+‚ÄúPageviewPerformanceData.domProcessing‚Äù
 
 Use as a dimension: No
 Cardinality: high
 
 Exception Telemetry Item
-Exception telemetry item is complex and heavy object. We will need a separate effort to minimize the size of every single exception object. Problem ID for exception is calculated on DC and typically it is a customerís function name and exception type. Problem ID is the only dimension that we will aggregate by.
+Exception telemetry item is complex and heavy object. We will need a separate effort to minimize the size of every single exception object. Problem ID for exception is calculated on DC and typically it is a customer‚Äôs function name and exception type. Problem ID is the only dimension that we will aggregate by.
 
-CALCULATED IN DC: ìExceptionData.problemIdî
+CALCULATED IN DC: ‚ÄúExceptionData.problemId‚Äù
 
 Use as a dimension: Yes
 Cardinality: medium
 
-ìExceptionData.handledAtî
-ìExceptionData.exceptionsî
-ìExceptionData.severityLevelî
-ìExceptionData.crashThreadIdî
+‚ÄúExceptionData.handledAt‚Äù
+‚ÄúExceptionData.exceptions‚Äù
+‚ÄúExceptionData.severityLevel‚Äù
+‚ÄúExceptionData.crashThreadId‚Äù
 
 Use as a dimension: No
 Cardinality: high
@@ -238,7 +229,7 @@ Cardinality: high
 Session State
 Session state event is sent every time session starts and stops. This event is used for counting user and sessions counts. We should discuss whether we can get this information from actual events like page views and requests.
 
-                ìsessionState.stateî
+                ‚ÄúsessionState.state‚Äù
 
 Use as a dimension: No
 
@@ -248,34 +239,34 @@ Dimensions:
 
 Server SDK:
 "ai.device.roleInstance"
-ìai.operation.isSyntheticî
+‚Äúai.operation.isSynthetic‚Äù
 
 "requestData.name"
 "requestData.success"
 
 "requestData.responseCode"
-ìrequestData.performanceBucketî
+‚ÄúrequestData.performanceBucket‚Äù
 
-ìdependencyData.nameî
-ìdependencyData.successî
-ìdependencyData.dependencyTypeNameî
-ìdependencyData.performanceBucketî
+‚ÄúdependencyData.name‚Äù
+‚ÄúdependencyData.success‚Äù
+‚ÄúdependencyData.dependencyTypeName‚Äù
+‚ÄúdependencyData.performanceBucket‚Äù
 
-ìeventData.nameî
+‚ÄúeventData.name‚Äù
 
-ìExceptionData.problemIdî
+‚ÄúExceptionData.problemId‚Äù
 
 JavaScript SDK:
 "ai.device.browser"
-ìai.locaiton.Countryî
-ìai.locaiton.Provinceî
-ìai.operation.isSyntheticî
+‚Äúai.locaiton.Country‚Äù
+‚Äúai.locaiton.Province‚Äù
+‚Äúai.operation.isSynthetic‚Äù
 
-ìpageViewData.nameî
-ìpageViewData.urlBaseî
-ìpageViewData.durationPerformanceBucketî
+‚ÄúpageViewData.name‚Äù
+‚ÄúpageViewData.urlBase‚Äù
+‚ÄúpageViewData.durationPerformanceBucket‚Äù
 
-ìExceptionData.problemIdî
+‚ÄúExceptionData.problemId‚Äù
 
 
 Impact analysis queries by these fields:
