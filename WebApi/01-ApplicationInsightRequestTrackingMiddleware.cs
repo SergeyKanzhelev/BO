@@ -25,6 +25,8 @@ namespace WebApi
         {
             var requestTelemetry = telemetryClient.StartOperation<RequestTelemetry>(context.Request.Path.Value);
 
+            context.Environment.Add("Microsoft.ApplicationInsights.RequestTelemetry", requestTelemetry.Telemetry);
+
             try
             {
                 await this.Next.Invoke(context);
