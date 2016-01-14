@@ -3,6 +3,8 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.WindowsServer;
 using Microsoft.Owin;
 using System.Linq;
+using Microsoft.ApplicationInsights.Channel;
+using Owin;
 
 namespace WebApi
 {
@@ -14,8 +16,6 @@ namespace WebApi
             rt.Url = context.Request.Uri;
             rt.ResponseCode = context.Response.StatusCode.ToString();
             rt.Success = context.Response.StatusCode >= 200 && context.Response.StatusCode < 300;
-
-            rt.Context.Component.Version = "Application Version";
 
             string[] xForwardedFor;
             rt.Context.Location.Ip = context.Request.Headers.TryGetValue("X-Forwarded-For", out xForwardedFor) ?
@@ -40,7 +40,7 @@ namespace WebApi
             rt.Context.User.AuthenticatedUserId = context.Request.User?.Identity?.Name;
         }
 
-        public static void ConfigureInitializers(this TelemetryConfiguration configuration)
+        public static void ConfigureInitializers(this TelemetryConfiguration configuration, IAppBuilder app)
         {
             //rt.Context.Cloud.RoleName = "Role Name";
             //rt.Context.Cloud.RoleInstance = "Role Instance";
@@ -48,7 +48,26 @@ namespace WebApi
             configuration.TelemetryInitializers.Add(new AzureRoleEnvironmentTelemetryInitializer());
             configuration.TelemetryInitializers.Add(new DomainNameRoleInstanceTelemetryInitializer());
 
+            //rt.Context.Component.Version = "Application Version";
+            configuration.TelemetryInitializers.Add(new ApplicationVersionTelemetryInitializer(app));
         }
 
+        private class ApplicationVersionTelemetryInitializer : ITelemetryInitializer
+        {
+            private readonly string appVersion;
+
+            public ApplicationVersionTelemetryInitializer(IAppBuilder app)
+            {
+                this.appVersion = app.Properties["Version"].ToString();
+            }
+
+            public void Initialize(ITelemetry telemetry)
+            {
+                if (!string.IsNullOrEmpty(this.appVersion))
+                {
+                    telemetry.Context.Component.Version = this.appVersion;
+                }
+            }
+        }
     }
 }

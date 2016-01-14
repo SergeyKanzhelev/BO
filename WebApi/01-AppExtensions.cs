@@ -11,6 +11,8 @@ namespace WebApi
             configuration.InstrumentationKey = instrumentationKey;
 
             configuration.ConfigureChannel();
+            configuration.ConfigureInitializers(app);
+            configuration.ConfigureTelemetryModules();
 
             app.Use<ApplicationInsightRequestTrackingMiddleware>(configuration);
         }
