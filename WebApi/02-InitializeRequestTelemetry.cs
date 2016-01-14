@@ -18,9 +18,7 @@ namespace WebApi
             rt.Success = context.Response.StatusCode >= 200 && context.Response.StatusCode < 300;
 
             string[] xForwardedFor;
-            rt.Context.Location.Ip = context.Request.Headers.TryGetValue("X-Forwarded-For", out xForwardedFor) ?
-                xForwardedFor.FirstOrDefault() 
-                : (string)context.Request.Environment["server.RemoteIpAddress"];
+            rt.Context.Location.Ip = context.Request.RemoteIpAddress;
 
             //rt.Context.Operation.Id
             //rt.Context.Operation.ParentId
