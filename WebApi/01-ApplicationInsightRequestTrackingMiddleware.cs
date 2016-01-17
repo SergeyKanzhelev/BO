@@ -3,6 +3,7 @@ using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Owin;
 using System;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 
 namespace WebApi
@@ -25,6 +26,8 @@ namespace WebApi
             var requestTelemetry = operation.Telemetry;
 
             context.Environment.Add("Microsoft.ApplicationInsights.RequestTelemetry", requestTelemetry);
+
+            CallContext.LogicalSetData("Test", operation);
 
             try
             {

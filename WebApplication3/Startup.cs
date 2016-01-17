@@ -10,9 +10,8 @@ namespace WebApplication3
     {
         public void Configuration(IAppBuilder app)
         {
-            app.EnableApplicationInsights();
-
             ConfigureAuth(app);
+            app.EnableApplicationInsights();
         }
     }
 }
