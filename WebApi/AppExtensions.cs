@@ -5,10 +5,9 @@ namespace WebApi
 {
     public static class AppExtensions
     {
-        public static void EnableApplicationInsights(this IAppBuilder app, string instrumentationKey)
+        public static void EnableApplicationInsights(this IAppBuilder app)
         {
-            TelemetryConfiguration configuration = TelemetryConfiguration.CreateDefault();
-            configuration.InstrumentationKey = instrumentationKey;
+            var configuration = TelemetryConfiguration.Active;
 
             configuration.ConfigureChannel();
             configuration.ConfigureInitializers(app);

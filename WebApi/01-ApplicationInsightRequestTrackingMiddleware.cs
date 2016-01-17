@@ -21,15 +21,21 @@ namespace WebApi
 
         public override async Task Invoke(IOwinContext context)
         {
-            var requestTelemetry = telemetryClient.StartOperation<RequestTelemetry>(context.Request.Path.Value);
+            var operation = telemetryClient.StartOperation<RequestTelemetry>(context.Request.Path.Value);
+            var requestTelemetry = operation.Telemetry;
 
-            context.Environment.Add("Microsoft.ApplicationInsights.RequestTelemetry", requestTelemetry.Telemetry);
+            context.Environment.Add("Microsoft.ApplicationInsights.RequestTelemetry", requestTelemetry);
 
             try
             {
                 await this.Next.Invoke(context);
 
-                requestTelemetry.Telemetry.InitializeFrom(context);
+                requestTelemetry.HttpMethod = context.Request.Method;
+                requestTelemetry.Url = context.Request.Uri;
+                requestTelemetry.ResponseCode = context.Response.StatusCode.ToString();
+                requestTelemetry.Success = context.Response.StatusCode >= 200 && context.Response.StatusCode < 300;
+
+                requestTelemetry.InitializeContextFrom(context);
             }
             catch(Exception exc)
             {
@@ -37,7 +43,7 @@ namespace WebApi
             }
             finally
             {
-                telemetryClient.StopOperation(requestTelemetry);
+                telemetryClient.StopOperation(operation);
             }
         }
     }

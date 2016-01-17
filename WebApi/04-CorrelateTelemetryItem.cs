@@ -8,9 +8,9 @@ namespace WebApi
     {
         public static void InitializeFrom(this ITelemetry telemetry, IOwinContext context)
         {
-            //context.Environment.Po
+            var requestTelemetry = (RequestTelemetry)context.Environment["Microsoft.ApplicationInsights.RequestTelemetry"];
 
-            telemetry.Context.User.Id = request.Context.User.Id;
+            telemetry.Context.User.Id = requestTelemetry.Context.User.Id;
         }
     }
 }

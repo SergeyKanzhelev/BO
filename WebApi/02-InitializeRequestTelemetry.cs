@@ -10,26 +10,15 @@ namespace WebApi
 {
     public static class InitializeRequestTelemetry
     {
-        public static void InitializeFrom(this RequestTelemetry rt, IOwinContext context)
+        public static void InitializeContextFrom(this RequestTelemetry rt, IOwinContext context)
         {
-            rt.HttpMethod = context.Request.Method;
-            rt.Url = context.Request.Uri;
-            rt.ResponseCode = context.Response.StatusCode.ToString();
-            rt.Success = context.Response.StatusCode >= 200 && context.Response.StatusCode < 300;
-
-            string[] xForwardedFor;
             rt.Context.Location.Ip = context.Request.RemoteIpAddress;
-
-            //rt.Context.Operation.Id
-            //rt.Context.Operation.ParentId
-            //rt.Context.Operation.Name
 
             string[] userAgent;
             if (context.Request.Headers.TryGetValue("User-Agent", out userAgent) && userAgent.FirstOrDefault() == "AlwaysOn")
             {
                 rt.Context.Operation.SyntheticSource = "Azure AlwaysOn";
             }
-
 
             rt.Context.User.Id = context.Request.Cookies["ai_user"]?.Split("|".ToCharArray())[0];
             rt.Context.Session.Id = context.Request.Cookies["ai_session"]?.Split("|".ToCharArray())[0];
@@ -56,7 +45,7 @@ namespace WebApi
 
             public ApplicationVersionTelemetryInitializer(IAppBuilder app)
             {
-                this.appVersion = app.Properties["Version"].ToString();
+                //this.appVersion = app.Properties["Version"].ToString();
             }
 
             public void Initialize(ITelemetry telemetry)

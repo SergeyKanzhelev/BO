@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.ApplicationInsights;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,6 +12,9 @@ namespace WebApplication3.Controllers
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
+
+            var client = new TelemetryClient();
+            client.TrackTrace("trace");
 
             return View();
         }

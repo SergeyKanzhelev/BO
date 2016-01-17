@@ -10,7 +10,7 @@ namespace WebApplication3
     {
         public void Configuration(IAppBuilder app)
         {
-            app.EnableApplicationInsights("YOUR KEY");
+            app.EnableApplicationInsights();
 
             ConfigureAuth(app);
         }

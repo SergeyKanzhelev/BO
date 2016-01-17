@@ -74,7 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="01-ApplicationInsightRequestTrackingMiddleware.cs" />
-    <Compile Include="01-AppExtensions.cs" />
+    <Compile Include="AppExtensions.cs" />
     <Compile Include="03-InitializeTelemetryChannel.cs" />
     <Compile Include="04-CorrelateTelemetryItem.cs" />
     <Compile Include="05-InitializeModules.cs" />
