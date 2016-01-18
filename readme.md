@@ -1,8 +1,5 @@
 #Slides
 
-![imag0303](https://cloud.githubusercontent.com/assets/9950081/12404336/597dc056-bdef-11e5-96c6-db9d736dede6.jpg)
-
-
 ## 1. Intro
 [Sergey] 
 
@@ -49,6 +46,8 @@ Talk about big customers and how we will minimize amount of collected data witho
 
 Community page? https://azure.microsoft.com/en-us/documentation/articles/app-insights-platforms/
 
+
+![imag0303](https://cloud.githubusercontent.com/assets/9950081/12404336/597dc056-bdef-11e5-96c6-db9d736dede6.jpg)
 
 
 1. Middleware - see https://gist.github.com/s093294/d4b8abdaf4000b6c7f80
