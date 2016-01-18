@@ -3,6 +3,54 @@
 ![imag0303](https://cloud.githubusercontent.com/assets/9950081/12404336/597dc056-bdef-11e5-96c6-db9d736dede6.jpg)
 
 
+## 1. Intro
+[Sergey] 
+
+Introduction slide
+- What is Application Insights
+- Auto collection of the Data
+- Application Insights is a platform - supprot your technology
+
+## 2. Architecture
+[Alex]
+
+## 3. Journey
+[Alex]
+
+## 4. Middleware
+[Alex]
+
+## 5. Context Semantics
+[Sergey] 
+
+Describe every context propery and how they being collected.
+
+UI: on *performance blade* - group by and filter by property
+
+## 6. Correlation
+[Sergey] 
+
+Show how to correlate by user, session and by ID
+
+UI: on *details blade* - same user, same session and telemetry for this request
+
+## 7. Dependencies
+[Alex]
+
+## 8. Adaptive sampling
+[Sergey] 
+
+Talk about big customers and how we will minimize amount of collected data without loosing semantics
+
+## 9. Demo - live data
+
+## 10. GitHub + community
+[Sergey] 
+
+Community page? https://azure.microsoft.com/en-us/documentation/articles/app-insights-platforms/
+
+
+
 1. Middleware - see https://gist.github.com/s093294/d4b8abdaf4000b6c7f80
 
 2. Exception tracking - see https://github.com/advancedrei/ApplicationInsights.Helpers/blob/master/src/WebApi2/InsightsExceptionLogger.cs
