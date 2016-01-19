@@ -14,8 +14,6 @@ namespace WebApplication3.Controllers
         {
             ViewBag.Title = "Home Page";
 
-            var operation = CallContext.LogicalGetData("Test");
-
             var client = new TelemetryClient();
             client.TrackTrace("trace");
 

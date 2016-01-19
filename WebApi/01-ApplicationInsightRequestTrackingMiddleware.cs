@@ -17,7 +17,6 @@ namespace WebApi
             : base(next)
         {
             telemetryClient = new TelemetryClient(telemetryConfiguration);
-            telemetryClient.TrackEvent("Initialized");
         }
 
         public override async Task Invoke(IOwinContext context)
@@ -26,8 +25,6 @@ namespace WebApi
             var requestTelemetry = operation.Telemetry;
 
             context.Environment.Add("Microsoft.ApplicationInsights.RequestTelemetry", requestTelemetry);
-
-            CallContext.LogicalSetData("Test", operation);
 
             try
             {

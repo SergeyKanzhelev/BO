@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8846AAAF-A158-431E-8BA5-A2DAD64A1506}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet.config = NuGet.config
+		readme.md = readme.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwinSelfHostDemo", "OwinSelfHostDemo\OwinSelfHostDemo.csproj", "{0BFF0CF5-96EC-4347-9EF9-FC919155EF0E}"
