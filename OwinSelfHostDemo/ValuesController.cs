@@ -9,6 +9,7 @@ namespace OwinSelfHostDemo
         // GET api/values 
         public IEnumerable<string> Get()
         {
+            
             var client = new TelemetryClient();
             client.TrackTrace("trace");
 

@@ -3,14 +3,12 @@ using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Owin;
 using System;
-using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 
 namespace WebApi
 {
     public class ApplicationInsightRequestTrackingMiddleware : OwinMiddleware
     {
-
         private readonly TelemetryClient telemetryClient;
 
         public ApplicationInsightRequestTrackingMiddleware(OwinMiddleware next, TelemetryConfiguration telemetryConfiguration)
@@ -21,13 +19,12 @@ namespace WebApi
 
         public override async Task Invoke(IOwinContext context)
         {
-            var operation = telemetryClient.StartOperation<RequestTelemetry>(context.Request.Path.Value);
-            var requestTelemetry = operation.Telemetry;
-
-            context.Environment.Add("Microsoft.ApplicationInsights.RequestTelemetry", requestTelemetry);
+            var operation = telemetryClient.StartRequestTracking(context, context.Request.Path.Value);
 
             try
             {
+                var requestTelemetry = operation.Telemetry;
+
                 await this.Next.Invoke(context);
 
                 requestTelemetry.HttpMethod = context.Request.Method;
@@ -37,13 +34,18 @@ namespace WebApi
 
                 requestTelemetry.InitializeContextFrom(context);
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
-                telemetryClient.TrackException(exc);
+                var telemetry = new ExceptionTelemetry(exc);
+                telemetry.HandledAt = ExceptionHandledAt.Unhandled;
+
+                telemetry.InitializeContextFrom(context);
+                
+                telemetryClient.TrackException(telemetry);
             }
             finally
             {
-                telemetryClient.StopOperation(operation);
+                telemetryClient.StopRequestTracking(operation);
             }
         }
     }

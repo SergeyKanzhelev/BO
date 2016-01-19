@@ -1,4 +1,6 @@
 ﻿using Owin;
+using System.Linq;
+using System.Reflection;
 using System.Web.Http;
 using WebApi;
 
@@ -10,6 +12,11 @@ namespace OwinSelfHostDemo
         // parameter in the WebApp.Start method.
         public void Configuration(IAppBuilder appBuilder)
         {
+            appBuilder.Properties["Version"] = typeof(Startup).Assembly.GetCustomAttributes(false)
+                .OfType<AssemblyFileVersionAttribute>()
+                .First()
+                .Version;
+
             // Configure Web API for self-host. 
             HttpConfiguration config = new HttpConfiguration();
             config.Routes.MapHttpRoute(
