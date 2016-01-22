@@ -19,20 +19,33 @@ namespace OwinSelfHostDemo
             Thread.Sleep(TimeSpan.FromMilliseconds(idx));
 
             var client = new TelemetryClient();
-            client.TrackTrace("trace");
+            client.TrackTrace("trace get");
 
-            return new string[] { "value1", "value2" };
+            if (rand.NextDouble() > 0.8)
+            {
+                throw new InvalidOperationException("Server performed an invalid operation");
+            }
+            else
+            {
+                return new string[] { "value1", "value2" };
+            }
         }
 
         // GET api/values/5 
         public async Task<string> Get(int id)
         {
             var client = new TelemetryClient();
-            client.TrackTrace("trace");
+            client.TrackTrace("trace get/id");
 
             HttpClient httpClient = new HttpClient();
-
-            return await httpClient.GetStringAsync("http://bing.com");
+            if (rand.NextDouble() > 0.8)
+            {
+                throw new InvalidOperationException("Server performed an invalid operation");
+            }
+            else
+            {
+                return await httpClient.GetStringAsync(rand.NextDouble() > 0.8 ? "http://www.bing.com" : "http://google.com/404/");
+            }
         }
 
         // POST api/values 

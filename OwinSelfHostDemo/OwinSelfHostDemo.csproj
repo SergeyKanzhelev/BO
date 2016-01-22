@@ -98,9 +98,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebApi\WebApi.csproj">
+    <ProjectReference Include="..\WebApi\ApplicationInsights.WebApiSDK.csproj">
       <Project>{269a4c16-71a6-4205-97f4-c60ee7f0e3fb}</Project>
-      <Name>WebApi</Name>
+      <Name>ApplicationInsights.WebApiSDK</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
