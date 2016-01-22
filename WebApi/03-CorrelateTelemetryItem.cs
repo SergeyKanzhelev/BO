@@ -12,7 +12,8 @@ namespace WebApi
         {
             var requestTelemetry = (RequestTelemetry)context.Environment["Microsoft.ApplicationInsights.RequestTelemetry"];
 
-            telemetry.Context.User.Id = requestTelemetry.Context.User.Id;
+            telemetry.Context.Operation.Id = requestTelemetry.Context.Operation.Id;
+            telemetry.Context.Operation.ParentId = requestTelemetry.Id;
         }
 
         public static IOperationHolder<RequestTelemetry> StartRequestTracking(this TelemetryClient telemetryClient, IOwinContext context, string name)
@@ -21,6 +22,16 @@ namespace WebApi
 
             var requestTelemetry = operation.Telemetry;
             context.Environment.Add("Microsoft.ApplicationInsights.RequestTelemetry", requestTelemetry);
+
+            if (context.Request.Headers.ContainsKey("x-ms-request-root-id"))
+            {
+                requestTelemetry.Context.Operation.Id = context.Request.Headers["x-ms-request-root-id"];
+            }
+
+            if (context.Request.Headers.ContainsKey("x-ms-request-id"))
+            {
+                requestTelemetry.Context.Operation.ParentId = context.Request.Headers["x-ms-request-id"];
+            }
 
             return operation;
         }
