@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using System.Web.Http;
+using System.Web.Http.ExceptionHandling;
 using WebApi;
 
 namespace OwinSelfHostDemo
@@ -25,9 +26,12 @@ namespace OwinSelfHostDemo
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            config.Services.Add(typeof(IExceptionLogger), new AiExceptionLogger());
+
             appBuilder.EnableApplicationInsights();
 
             appBuilder.UseWebApi(config);
+
         }
     }
 }
