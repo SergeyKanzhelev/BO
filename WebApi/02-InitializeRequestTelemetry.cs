@@ -24,6 +24,10 @@ namespace WebApi
             rt.Context.Component.Version = "Application Version";
 
 
+            // Custom properties - limit 200 per application
+            rt.Context.Properties["DeploymentUnit"] = "SouthUS";
+
+
             // Application user context
             rt.Context.Location.Ip = "127.0.0.1";
             //rt.Context.Location.Country
