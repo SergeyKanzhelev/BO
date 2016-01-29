@@ -38,29 +38,13 @@ namespace OwinSelfHostDemo
             client.TrackTrace("trace get/id");
 
             HttpClient httpClient = new HttpClient();
-            if (rand.NextDouble() > 0.8)
-            {
-                throw new InvalidOperationException("Server performed an invalid operation");
-            }
-            else
+
+            if (id == 42)
             {
                 return await httpClient.GetStringAsync(rand.NextDouble() > 0.8 ? "http://www.bing.com" : "http://google.com/404/");
             }
-        }
 
-        // POST api/values 
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5 
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5 
-        public void Delete(int id)
-        {
+            return await Task.FromResult("id: " + id);
         }
     }
 }

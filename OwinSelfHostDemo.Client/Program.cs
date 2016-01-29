@@ -15,19 +15,28 @@ namespace OwinSelfHostDemo.Client
 
             Random rand = new Random();
 
-            for (int i = 0; i < 100; i++)
+            ThreadStart ts = new ThreadStart(() =>
             {
-                var response = client.GetAsync(baseAddress + "api/values").Result;
+                while (true)
+                {
+                    var response = client.GetAsync(baseAddress + "api/values").Result;
 
-                Console.WriteLine(response.Content.ReadAsStringAsync().Result);
+                    Console.WriteLine(response.Content.ReadAsStringAsync().Result);
 
-                var idx = Convert.ToInt32(Math.Round(rand.NextDouble() * 100));
-                Thread.Sleep(TimeSpan.FromMilliseconds(idx));
+                    var idx = Convert.ToInt32(Math.Round(rand.NextDouble() * 100));
+                    Thread.Sleep(TimeSpan.FromMilliseconds(idx));
 
-                response = client.GetAsync(baseAddress + "api/values/" + idx).Result;
+                    response = client.GetAsync(baseAddress + "api/values/" + idx).Result;
 
-                Console.WriteLine(response.Content.ReadAsStringAsync().Result);
+                    Console.WriteLine(response.Content.ReadAsStringAsync().Result);
 
+                }
+            });
+
+            for (int i = 0; i < 10; i++)
+            {
+                Thread t = new Thread(ts);
+                t.Start();
             }
         }
     }

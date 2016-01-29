@@ -3,11 +3,26 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Owin;
+using System.Linq;
 
 namespace WebApi
 {
     public static class CorrelateTelemetryItem
     {
+        public static void InitializeContextFrom(this ITelemetry rt, IOwinContext context)
+        {
+            rt.Context.Location.Ip = context.Request.RemoteIpAddress;
+
+            string[] userAgent;
+            if (context.Request.Headers.TryGetValue("User-Agent", out userAgent) && userAgent.FirstOrDefault() == "AlwaysOn")
+            {
+                rt.Context.Operation.SyntheticSource = "Azure AlwaysOn";
+            }
+
+            rt.Context.User.Id = context.Request.Cookies["ai_user"]?.Split("|".ToCharArray())[0];
+            rt.Context.Session.Id = context.Request.Cookies["ai_session"]?.Split("|".ToCharArray())[0];
+        }
+
         public static void InitializeFrom(this ITelemetry telemetry, IOwinContext context)
         {
             var requestTelemetry = (RequestTelemetry)context.Environment["Microsoft.ApplicationInsights.RequestTelemetry"];
@@ -16,11 +31,8 @@ namespace WebApi
             telemetry.Context.Operation.ParentId = requestTelemetry.Id;
         }
 
-        public static IOperationHolder<RequestTelemetry> StartRequestTracking(this TelemetryClient telemetryClient, IOwinContext context, string name)
+        public static void StartRequestTracking(this TelemetryClient telemetryClient, IOwinContext context, RequestTelemetry requestTelemetry)
         {
-            var operation = telemetryClient.StartOperation<RequestTelemetry>(name);
-
-            var requestTelemetry = operation.Telemetry;
             context.Environment.Add("Microsoft.ApplicationInsights.RequestTelemetry", requestTelemetry);
 
             if (context.Request.Headers.ContainsKey("x-ms-request-root-id"))
@@ -32,14 +44,6 @@ namespace WebApi
             {
                 requestTelemetry.Context.Operation.ParentId = context.Request.Headers["x-ms-request-id"];
             }
-
-            return operation;
         }
-
-        public static void StopRequestTracking(this TelemetryClient telemetryClient, IOperationHolder<RequestTelemetry> operation)
-        {
-            telemetryClient.StopOperation(operation);
-        }
-
     }
 }

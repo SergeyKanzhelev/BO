@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace WebApi
 {
-    public class ApplicationInsightRequestTrackingMiddleware : OwinMiddleware
+    public class ApplicationInsightRequestTrackingMiddleware :  OwinMiddleware
     {
         private readonly TelemetryClient telemetryClient;
 
-        public ApplicationInsightRequestTrackingMiddleware(OwinMiddleware next, TelemetryConfiguration telemetryConfiguration)
+        public ApplicationInsightRequestTrackingMiddleware(OwinMiddleware next, TelemetryConfiguration configuration)
             : base(next)
         {
-            telemetryClient = new TelemetryClient(telemetryConfiguration);
+            telemetryClient = new TelemetryClient(configuration);
         }
 
         public override async Task Invoke(IOwinContext context)
         {
-            var operation = telemetryClient.StartRequestTracking(context, context.Request.Path.Value);
+            var operation = telemetryClient.StartOperation<RequestTelemetry>(context.Request.Path.Value);
 
             try
             {
@@ -32,6 +32,7 @@ namespace WebApi
                 requestTelemetry.ResponseCode = context.Response.StatusCode.ToString();
                 requestTelemetry.Success = context.Response.StatusCode >= 200 && context.Response.StatusCode < 300;
 
+                requestTelemetry.Context.Properties["Deployment-Unit"] = "Dev";
                 requestTelemetry.InitializeContextFrom(context);
             }
             catch (Exception exc)
@@ -45,7 +46,7 @@ namespace WebApi
             }
             finally
             {
-                telemetryClient.StopRequestTracking(operation);
+                telemetryClient.StopOperation(operation);
             }
         }
     }

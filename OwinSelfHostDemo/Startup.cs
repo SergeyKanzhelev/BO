@@ -13,25 +13,19 @@ namespace OwinSelfHostDemo
         // parameter in the WebApp.Start method.
         public void Configuration(IAppBuilder appBuilder)
         {
-            appBuilder.Properties["Version"] = typeof(Startup).Assembly.GetCustomAttributes(false)
-                .OfType<AssemblyFileVersionAttribute>()
-                .First()
-                .Version;
-
             // Configure Web API for self-host. 
             HttpConfiguration config = new HttpConfiguration();
+            appBuilder.Configure(config);
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            config.Services.Add(typeof(IExceptionLogger), new AiExceptionLogger());
-
             appBuilder.EnableApplicationInsights();
 
             appBuilder.UseWebApi(config);
-
         }
     }
 }

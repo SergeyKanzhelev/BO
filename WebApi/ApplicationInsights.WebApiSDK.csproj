@@ -56,7 +56,8 @@
       <HintPath>..\packages\Microsoft.ApplicationInsights.2.0.0-beta4\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin">
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -75,7 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="01-ApplicationInsightRequestTrackingMiddleware.cs" />
-    <Compile Include="AppExtensions.cs" />
     <Compile Include="05-InitializeTelemetryChannel.cs" />
     <Compile Include="03-CorrelateTelemetryItem.cs" />
     <Compile Include="04-InitializeModules.cs" />
