@@ -41,7 +41,7 @@ namespace OwinSelfHostDemo
 
             if (id == 42)
             {
-                return await httpClient.GetStringAsync(rand.NextDouble() > 0.8 ? "http://www.bing.com" : "http://google.com/404/");
+                return await httpClient.GetStringAsync("http://google.com/404/");
             }
 
             return await Task.FromResult("id: " + id);

@@ -1,0 +1,6 @@
+
+Install-Package Microsoft.Owin
+
+Install-Package Microsoft.ApplicationInsights -Pre
+
+Install-Package Microsoft.ApplicationInsights.WindowsServer -Pre

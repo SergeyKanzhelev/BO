@@ -1,9 +1,10 @@
-﻿using Owin;
+﻿using Microsoft.ApplicationInsights.Extensibility;
+using Owin;
+using OwinSelfHostSDK;
 using System.Linq;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
-using WebApi;
 
 namespace OwinSelfHostDemo
 {
@@ -23,7 +24,10 @@ namespace OwinSelfHostDemo
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            appBuilder.EnableApplicationInsights();
+            // alex's ikey: "a7010d58-fd1a-4d1f-b385-4d041d7c558c";
+            TelemetryConfiguration.Active.InstrumentationKey = "c92059c3-9428-43e7-9b85-a96fb7c9488f";
+
+            //appBuilder.EnableApplicationInsights();
 
             appBuilder.UseWebApi(config);
         }

@@ -4,6 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
+using Microsoft.ApplicationInsights.Channel;
+using System;
+using OwinSelfHostDemo.Initialization;
 
 namespace OwinSelfHostDemo
 {
@@ -17,6 +20,8 @@ namespace OwinSelfHostDemo
                 .Version;
 
             config.Services.Add(typeof(IExceptionLogger), new AiExceptionLogger());
+
+            TelemetryConfiguration.Active.TelemetryInitializers.Add(new FailedDepenendenciesTelemetryInitializer());
         }
     }
 }

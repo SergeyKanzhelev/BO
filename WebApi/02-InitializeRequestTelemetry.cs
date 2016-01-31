@@ -17,7 +17,7 @@ namespace WebApi
 
             configuration.TelemetryInitializers.Add(new ApplicationVersionTelemetryInitializer(app));
         }
-
+        
         private class ApplicationVersionTelemetryInitializer : ITelemetryInitializer
         {
             private readonly string appVersion;
@@ -35,5 +35,6 @@ namespace WebApi
                 }
             }
         }
+
     }
 }

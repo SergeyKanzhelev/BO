@@ -88,8 +88,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppExtensions.cs" />
     <Compile Include="Initialization\AiExceptionLogger.cs" />
+    <Compile Include="Initialization\FailedDepenendenciesTelemetryInitializer.cs" />
     <Compile Include="Initialization\SelfExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -101,9 +101,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebApi\ApplicationInsights.WebApiSDK.csproj">
-      <Project>{269a4c16-71a6-4205-97f4-c60ee7f0e3fb}</Project>
-      <Name>ApplicationInsights.WebApiSDK</Name>
+    <ProjectReference Include="..\OwinSelfHostSDK\OwinSelfHostSDK.csproj">
+      <Project>{b89be6c2-a17b-4722-a496-0c9c0dadf4d1}</Project>
+      <Name>OwinSelfHostSDK</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
