@@ -1,0 +1,27 @@
+{
+  "name": "Microsoft.ApplicationInsights.c92059c3942843e79b85a96fb7c9488f.Request",
+  "time": "2016-01-31T19:48:47.4956453-08:00",
+  "iKey": "c92059c3-9428-43e7-9b85-a96fb7c9488f",
+  "tags": {
+    "ai.internal.sdkVersion": "2.0.0.11972",
+    "ai.device.roleInstance": "MININT-7HR9HQQ.redmond.corp.microsoft.com",
+    "ai.application.ver": "2.0",
+    "ai.operation.id": "UBvv3Q6S+pQ=",
+    "ai.operation.name": "/api/values/42"
+  },
+  "data": {
+    "baseType": "RequestData",
+    "baseData": {
+      "ver": 2,
+      "id": "UBvv3Q6S+pQ=",
+      "name": "/api/values/42",
+      "startTime": "2016-01-31T19:48:47.4956453-08:00",
+      "duration": "00:00:02.5738777",
+      "success": true,
+      "responseCode": "500",
+      "url": "http://localhost:9000/api/values/42",
+      "httpMethod": "GET",
+      "properties": { "IsDemo": "yeah!" }
+    }
+  }
+}

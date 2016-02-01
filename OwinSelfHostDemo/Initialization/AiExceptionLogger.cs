@@ -1,6 +1,7 @@
 ﻿using System.Web.Http.ExceptionHandling;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace OwinSelfHostDemo
 {
@@ -8,9 +9,9 @@ namespace OwinSelfHostDemo
     {
         private readonly TelemetryClient client;
 
-        public AiExceptionLogger()
+        public AiExceptionLogger(TelemetryConfiguration configuration)
         {
-            client = new TelemetryClient();
+            client = new TelemetryClient(configuration);
         }
 
         public override void Log(ExceptionLoggerContext context)

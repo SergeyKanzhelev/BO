@@ -12,13 +12,13 @@ namespace OwinSelfHostDemo
 {
     public static class SelfExtensions
     {
-        public static void Configure(this IAppBuilder app, HttpConfiguration config, string version)
+        public static void Configure(this IAppBuilder app, HttpConfiguration config, string version, TelemetryConfiguration configuration)
         {
             app.Properties["Version"] = version;
 
-            config.Services.Add(typeof(IExceptionLogger), new AiExceptionLogger());
+            config.Services.Add(typeof(IExceptionLogger), new AiExceptionLogger(configuration));
 
-            TelemetryConfiguration.Active.TelemetryInitializers.Add(new FailedDepenendenciesTelemetryInitializer());
+            configuration.TelemetryInitializers.Add(new FailedDepenendenciesTelemetryInitializer());
         }
     }
 }

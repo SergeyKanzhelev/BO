@@ -14,9 +14,14 @@ namespace OwinSelfHostDemo
         // parameter in the WebApp.Start method.
         public void Configuration(IAppBuilder appBuilder, string version)
         {
+            var configuration = TelemetryConfiguration.CreateDefault();
+            // alex's ikey: "a7010d58-fd1a-4d1f-b385-4d041d7c558c";
+            configuration.InstrumentationKey = "c92059c3-9428-43e7-9b85-a96fb7c9488f";
+
+
             // Configure Web API for self-host. 
             HttpConfiguration config = new HttpConfiguration();
-            appBuilder.Configure(config, version);
+            appBuilder.Configure(config, version, configuration);
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
@@ -24,10 +29,8 @@ namespace OwinSelfHostDemo
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            // alex's ikey: "a7010d58-fd1a-4d1f-b385-4d041d7c558c";
-            TelemetryConfiguration.Active.InstrumentationKey = "c92059c3-9428-43e7-9b85-a96fb7c9488f";
 
-            //appBuilder.EnableApplicationInsights();
+            //appBuilder.EnableApplicationInsights(configuration);
 
             appBuilder.UseWebApi(config);
         }
