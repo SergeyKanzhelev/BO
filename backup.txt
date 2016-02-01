@@ -53,12 +53,72 @@ namespace OwinSelfHostSDK
             configuration.TelemetryInitializers.Add(new DomainNameRoleInstanceTelemetryInitializer());
 
 
+05. Custom telemetry initializer
+
+	        private class ApplicationVersionTelemetryInitializer : ITelemetryInitializer
+	        {
+	            private readonly string appVersion;
+	
+	            public ApplicationVersionTelemetryInitializer(IAppBuilder app)
+	            {
+	                this.appVersion = app.Properties["Version"].ToString();
+	            }
+	
+	            public void Initialize(ITelemetry telemetry)
+	            {
+	            }
+	        }
+
+06. Read User/Session
+
+                operation.Telemetry.Context.User.Id = context.Request.Cookies["ai_user"]?.Split("|".ToCharArray())[0];
+                operation.Telemetry.Context.Session.Id = context.Request.Cookies["ai_session"]?.Split("|".ToCharArray())[0];
 
 
+07. Manual correlation
+
+                ExceptionTelemetry excT = new ExceptionTelemetry(exc);
+
+                if (TelemetryConfiguration.Active.TelemetryInitializers.Where(
+                        (item) => { return item is OperationCorrelationTelemetryInitializer; }).Count() == 0)
+                {
+
+                    excT.Context.Operation.Id = operation.Telemetry.Context.Operation.Id;
+                    excT.Context.Operation.ParentId = operation.Telemetry.Id;
+                }
+
+                client.TrackException(excT);
 
 
+08. Cross layer correlation
+
+                if (context.Request.Headers.ContainsKey("x-ms-request-root-id"))
+                {
+                    operation.Telemetry.Context.Operation.Id = context.Request.Headers["x-ms-request-root-id"];
+                }
+
+                if (context.Request.Headers.ContainsKey("x-ms-request-id"))
+                {
+                    operation.Telemetry.Context.Operation.ParentId = context.Request.Headers["x-ms-request-id"];
+                }
+
+09. Initialize modules
+
+            var performanceCounters = new PerformanceCollectorModule();
+            performanceCounters.Counters.Add(new PerformanceCounterCollectionRequest(@"\Process\ID", "ID"));
+            performanceCounters.Initialize(configuration);
+
+            var dependencies = new DependencyTrackingTelemetryModule();
+            dependencies.Initialize(configuration);
 
 
+10. Initialize channel
+
+            configuration.TelemetryChannel = new ServerTelemetryChannel();
+
+            configuration.TelemetryProcessorChainBuilder
+                .UseAdaptiveSampling()
+                .Build();
 
 
 
