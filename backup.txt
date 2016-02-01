@@ -1,3 +1,134 @@
+01. Empty middleware
+
+using System.Threading.Tasks;
+using Microsoft.Owin;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
+using System;
+
+namespace OwinSelfHostSDK
+{
+    public class ApplicationInsightsMiddleware : OwinMiddleware
+    {
+        public ApplicationInsightsMiddleware(OwinMiddleware next)
+            : base(next)
+        {
+        }
+        
+        public override async Task Invoke(IOwinContext context)
+        {
+            await Next.Invoke(context);
+        }
+    }
+}
+
+
+02. Initialize requestTelemetry
+                operation.Telemetry.HttpMethod = context.Request.Method;
+                operation.Telemetry.Url = context.Request.Uri;
+                operation.Telemetry.ResponseCode = context.Response.StatusCode.ToString();
+                operation.Telemetry.Success = context.Response.StatusCode == 200;
+
+
+03. AppExtension
+
+using Microsoft.ApplicationInsights.Extensibility;
+using Owin;
+
+namespace OwinSelfHostSDK
+{
+    public static class AppExtensions
+    {
+        public static void EnableApplicationInsights(this IAppBuilder app, TelemetryConfiguration configuration)
+        {
+            app.Use<ApplicationInsightsMiddleware>(configuration);
+        }
+    }
+}
+
+
+04. Standard telemetry initializer
+
+            configuration.TelemetryInitializers.Add(new AzureRoleEnvironmentTelemetryInitializer());
+            configuration.TelemetryInitializers.Add(new DomainNameRoleInstanceTelemetryInitializer());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 public static void ListContextProperties(ITelemetry rt)
 {
     // Every telemetry item has a context associated with it
@@ -38,4 +169,5 @@ public static void ListContextProperties(ITelemetry rt)
     rt.Context.Operation.ParentId = "Parent Operation Id";
     rt.Context.Operation.Name = "Operation name";
 }
+
 

@@ -7,6 +7,7 @@ using System.Web.Http.ExceptionHandling;
 using Microsoft.ApplicationInsights.Channel;
 using System;
 using OwinSelfHostDemo.Initialization;
+using Microsoft.Practices.Unity;
 
 namespace OwinSelfHostDemo
 {
@@ -17,6 +18,10 @@ namespace OwinSelfHostDemo
             app.Properties["Version"] = version;
 
             config.Services.Add(typeof(IExceptionLogger), new AiExceptionLogger(configuration));
+
+            var container = new UnityContainer();
+            container.RegisterInstance<TelemetryConfiguration>(configuration);
+            config.DependencyResolver = new UnityResolver(container);
 
             configuration.TelemetryInitializers.Add(new FailedDepenendenciesTelemetryInitializer());
         }
