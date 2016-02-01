@@ -10,14 +10,30 @@ namespace OwinSelfHostDemo
     {
         static void Main(string[] args)
         {
-            string baseAddress = "http://localhost:9000/";
+            new Thread(new ThreadStart(() =>
+            {
+                using (WebApp.Start("http://localhost:9000/", (appBuilder) => { new Startup().Configuration(appBuilder, "1.0"); }))
+                {
+                    while (true)
+                    {
+                        Thread.Sleep(100);
+                    }
+                }
+            })).Start();
 
-            // Start OWIN host 
-            using (WebApp.Start<Startup>(url: baseAddress))
-            {              
-                // don't stop the server just yet
-                Console.ReadLine();
-            }
+
+            new Thread(new ThreadStart(() =>
+            {
+                using (WebApp.Start("http://localhost:9001/", (appBuilder) => { new Startup().Configuration(appBuilder, "2.0"); }))
+                {
+                    while (true)
+                    {
+                        Thread.Sleep(100);
+                    }
+                }
+            })).Start();
+
+            Console.ReadLine();
         }
     }
 }

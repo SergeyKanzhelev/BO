@@ -12,11 +12,11 @@ namespace OwinSelfHostDemo
     {
         // This code configures Web API. The Startup class is specified as a type
         // parameter in the WebApp.Start method.
-        public void Configuration(IAppBuilder appBuilder)
+        public void Configuration(IAppBuilder appBuilder, string version)
         {
             // Configure Web API for self-host. 
             HttpConfiguration config = new HttpConfiguration();
-            appBuilder.Configure(config);
+            appBuilder.Configure(config, version);
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

@@ -12,12 +12,9 @@ namespace OwinSelfHostDemo
 {
     public static class SelfExtensions
     {
-        public static void Configure(this IAppBuilder app, HttpConfiguration config)
+        public static void Configure(this IAppBuilder app, HttpConfiguration config, string version)
         {
-            app.Properties["Version"] = typeof(Startup).Assembly.GetCustomAttributes(false)
-                .OfType<AssemblyFileVersionAttribute>()
-                .First()
-                .Version;
+            app.Properties["Version"] = version;
 
             config.Services.Add(typeof(IExceptionLogger), new AiExceptionLogger());
 
